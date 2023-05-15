@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:online_store_app/app_events.dart';
 import 'package:online_store_app/app_states.dart';
+import 'package:online_store_app/pages/welcome/bloc/welcome_blocs.dart';
 import 'package:online_store_app/pages/welcome/welcome.dart';
 
 import 'app_blocs.dart';
@@ -17,8 +18,11 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => AppBlocs(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(lazy: false, create: (context) => WelcomeBloc()),
+        BlocProvider(lazy: false, create: (context) => AppBlocs()),
+      ],
       child: ScreenUtilInit(
         builder: (context, child) => const MaterialApp(
           debugShowCheckedModeBanner: false,
@@ -58,6 +62,7 @@ class MyHomePage extends StatelessWidget {
         }),
       ),
       floatingActionButton: FloatingActionButton(
+        heroTag: "heroTag1",
         onPressed: () => BlocProvider.of<AppBlocs>(context).add(Increment()),
         tooltip: 'Increment',
         child: const Icon(Icons.add),
